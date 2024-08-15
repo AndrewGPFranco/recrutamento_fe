@@ -4,11 +4,13 @@
             <span class="title">Inscrever-se</span>
             <span class="subtitle">Crie uma conta com seu e-mail.</span>
             <div class="form-container">
-                <input type="text" class="input" placeholder="Usuário" v-model="username">
-                <input type="email" class="input" placeholder="Email" v-model="login">
-                <input type="password" class="input" placeholder="Senha" v-model="password">
+                <n-input v-model:value="username" type="text" placeholder="Username" />
+                <n-input v-model:value="login" type="email" placeholder="Email" />
+                <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
             </div>
-            <button>Cadastrar-se</button>
+            <n-button type="info">
+                Cadastrar-se
+            </n-button>
         </form>
         <div class="form-section">
             <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
@@ -19,7 +21,6 @@
 <script lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
-
 
 export default {
     name: "Formulario-Registro-Usuario",
@@ -77,22 +78,10 @@ export default {
     }
 
     .form-container {
-        overflow: hidden;
         border-radius: 8px;
         background-color: #fff;
         margin: 1rem 0 .5rem;
         width: 100%;
-    }
-
-    .input {
-        background: none;
-        border: 0;
-        outline: 0;
-        height: 40px;
-        width: 100%;
-        border-bottom: 1px solid #eee;
-        font-size: .9rem;
-        padding: 8px 15px;
     }
 
     .form-section {
@@ -112,21 +101,5 @@ export default {
     .form-section a:hover {
         color: #005ce6;
         text-decoration: underline;
-    }
-
-    .form button {
-        background-color: #0066ff;
-        color: #fff;
-        border: 0;
-        border-radius: 24px;
-        padding: 10px 16px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color .3s ease;
-    }
-
-    .form button:hover {
-        background-color: #005ce6;
     }
 </style>
