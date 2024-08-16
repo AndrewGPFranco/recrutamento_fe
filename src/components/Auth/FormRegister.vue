@@ -5,6 +5,11 @@
                 Usuário cadastrado com sucesso!
             </n-alert>
         </div>
+        <div class="feedback" v-if="feebackIsFalse">
+            <n-alert title="Status" type="error">
+                Ocorreu um erro ao cadastrar o usuário!
+            </n-alert>
+        </div>
         <div class="form-box">
             <form class="form">
                 <div class="titles">
@@ -38,12 +43,17 @@ export default {
         const login = ref("")
         const password = ref("")
         const feebackIsTrue = ref()
+        const feebackIsFalse = ref()
 
         const authStore = useAuthStore()
 
         const registerUser = async () => {
             await authStore.register(username.value, login.value, password.value)
-            feedback(true)
+            if(authStore.getStatus == 200) {
+                feedback(true)
+            } else {
+                feedback(false)
+            }
             username.value = ""
             login.value = ""
             password.value = ""
@@ -55,6 +65,11 @@ export default {
                 setTimeout(() => {
                     feebackIsTrue.value = false;
                 }, 5000);
+            } else {
+                feebackIsFalse.value = true;
+                setTimeout(() => {
+                    feebackIsFalse.value = false;
+                }, 5000);
             }
         }
 
@@ -63,7 +78,8 @@ export default {
             login,
             password,
             registerUser,
-            feebackIsTrue
+            feebackIsTrue,
+            feebackIsFalse
         }
     }
 }

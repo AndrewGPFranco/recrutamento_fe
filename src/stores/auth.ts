@@ -8,13 +8,18 @@ export const useAuthStore = defineStore("auth", {
         user: {
             username: "",
             login: ""
-        }
+        },
+        status: 0
     }),
     actions: {
         setToken(token: string) {
             this.token = token
         },
+        setStatus(status: number) {
+            this.status = status
+        },
         async register(username: string, login: string, password: string) {
+            this.setStatus(0)
             const data: User = {
                 username, 
                 login, 
@@ -24,6 +29,7 @@ export const useAuthStore = defineStore("auth", {
                 .then((response) => {
                     this.user.username = response.data.username
                     this.user.login = response.data.login
+                    this.setStatus(response.status)
                     return response
                 })
                 .catch((error) => {
@@ -37,6 +43,9 @@ export const useAuthStore = defineStore("auth", {
         },
         getUser: (state) => {
             return state.user
+        },
+        getStatus: (state) => {
+            return state.status
         }
     },
 })
