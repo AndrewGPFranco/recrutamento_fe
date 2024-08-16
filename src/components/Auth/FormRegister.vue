@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="feedback" v-if="feedbackMessage">
+        <div class="feedback" id="feedback" v-if="feedbackMessage">
             <n-alert :title="feedbackTitle" :type="feedbackType" closable>
                 {{ feedbackMessage }}
             </n-alert>
@@ -12,11 +12,11 @@
                     <span class="subtitle">Crie uma conta com seu e-mail.</span>
                 </div>
                 <div class="form-container">
-                    <n-input v-model:value="username" type="text" placeholder="Username" />
-                    <n-input v-model:value="login" type="email" placeholder="Email" />
-                    <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
+                    <n-input id="inputUsername" v-model:value="username" type="text" placeholder="Usuário" />
+                    <n-input id="inputEmail" v-model:value="login" type="email" placeholder="Email"  />
+                    <n-input id="inputPassword" v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
                 </div>
-                <n-button type="info" @click="registerUser()">
+                <n-button id="buttonRegister" type="info" @click="registerUser()">
                     Cadastrar-se
                 </n-button>
             </form>
