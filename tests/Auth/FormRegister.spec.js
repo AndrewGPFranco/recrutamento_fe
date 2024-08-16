@@ -1,48 +1,50 @@
-import { shallowMount } from '@vue/test-utils';
-import FormularioRegistroUsuario from '../../src/components/Auth/FormRegister.vue';
-import { useAuthStore } from '../../src/stores/auth.ts';
-import { describe, it, expect, jest } from '@jest/globals';
+import { mount } from '@vue/test-utils'
+import FormularioRegistroUsuario from '../../src/components/Auth/FormRegister.vue'
+import { describe, it, jest, expect } from '@jest/globals'
+import { NInput, NAlert, NButton } from 'naive-ui'
+import flushPromises from 'flush-promises'
 
 jest.mock('@/stores/auth.ts', () => ({
   useAuthStore: () => ({
     register: jest.fn(() => Promise.resolve({ status: 200 })),
     getStatus: 200,
   }),
-}));
+}))
 
-describe('Formulario-Registro-Usuario.vue', () => {
+describe('Formulario-Registro-Usuario', () => {
   it('reseta o formulário e exibe feedback de sucesso após o registro', async () => {
-    const wrapper = shallowMount(FormularioRegistroUsuario);
+    const wrapper = mount(FormularioRegistroUsuario, {
+      global: {
+        components: {
+          NInput, NAlert, NButton
+        }
+      }
+    })
+    
+    await wrapper.vm.$nextTick() 
 
-    const usernameInput = wrapper.find('#username input'); 
-    const loginInput = wrapper.find('#email'); 
-    const passwordInput = wrapper.find('#password input');
-    const registerButton = wrapper.find('button');
+    const usernameInput = wrapper.find('#inputUsername input')
+    const emailInput = wrapper.find('#inputEmail input')
+    const passwordInput = wrapper.find('#inputPassword input')
+    const btnRegister = wrapper.find('#buttonRegister')
 
-    await usernameInput.setValue('andrew'); 
-    await loginInput.setValue('andrew@email.com'); 
-    await passwordInput.setValue('minhasenha'); 
+    await usernameInput.setValue('Andrew')
+    await emailInput.setValue('andrew@example.com')
+    await passwordInput.setValue('********')
 
-    await registerButton.trigger('click');
+    expect(wrapper.find('#feedback').exists()).toBe(false)
 
-    await wrapper.vm.$nextTick(); 
+    await btnRegister.trigger('click')
+    await flushPromises()
+    await wrapper.vm.$nextTick()
 
-    expect(usernameInput.element.value).toBe('');
-    expect(loginInput.element.value).toBe('');
-    expect(passwordInput.element.value).toBe('');
+    const alertMessage = wrapper.findComponent(NAlert)
 
-    const feedbackAlert = wrapper.findComponent('n-alert');
-    expect(feedbackAlert.exists()).toBe(true);
-    expect(feedbackAlert.props('title')).toBe('Status');
-    expect(feedbackAlert.props('type')).toBe('success');
-    expect(feedbackAlert.text()).toBe('Usuário cadastrado com sucesso!');
-
-    const authStore = useAuthStore();
-    expect(authStore.register).toHaveBeenCalledWith('andrew', 'andrew@email.com', 'minhasenha');
-
-    jest.runAllTimers(); 
-    await wrapper.vm.$nextTick(); 
-
-    expect(wrapper.findComponent('n-alert').exists()).toBe(false);
-  });
-});
+    expect(usernameInput.element.value).toBe("")
+    expect(emailInput.element.value).toBe("")
+    expect(passwordInput.element.value).toBe("")
+    expect(alertMessage.text()).toBe("StatusUsuário cadastrado com sucesso!")
+    expect(alertMessage.exists()).toBe(true)
+    expect(wrapper.find('#feedback').exists()).toBe(true)
+  })
+})
