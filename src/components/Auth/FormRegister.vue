@@ -1,21 +1,30 @@
 <template>
-    <div class="form-box">
-        <form class="form" @submit.prevent="registerUser">
-            <span class="title">Inscrever-se</span>
-            <span class="subtitle">Crie uma conta com seu e-mail.</span>
-            <div class="form-container">
-                <n-input v-model:value="username" type="text" placeholder="Username" />
-                <n-input v-model:value="login" type="email" placeholder="Email" />
-                <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
-            </div>
-            <n-button type="info">
-                Cadastrar-se
-            </n-button>
-        </form>
-        <div class="form-section">
-            <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
+    <main>
+        <div class="feedback" v-if="feebackIsTrue">
+            <n-alert title="Status" type="success" closable>
+                Usuário cadastrado com sucesso!
+            </n-alert>
         </div>
-    </div>
+        <div class="form-box">
+            <form class="form">
+                <div class="titles">
+                    <span class="title">Inscrever-se</span>
+                    <span class="subtitle">Crie uma conta com seu e-mail.</span>
+                </div>
+                <div class="form-container">
+                    <n-input v-model:value="username" type="text" placeholder="Username" />
+                    <n-input v-model:value="login" type="email" placeholder="Email" />
+                    <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
+                </div>
+                <n-button type="info" @click="registerUser()">
+                    Cadastrar-se
+                </n-button>
+            </form>
+            <div class="form-section">
+                <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
+            </div>
+        </div>
+    </main>
 </template>
 
 <script lang="ts">
@@ -28,21 +37,33 @@ export default {
         const username = ref("")
         const login = ref("")
         const password = ref("")
+        const feebackIsTrue = ref()
 
         const authStore = useAuthStore()
 
         const registerUser = async () => {
             await authStore.register(username.value, login.value, password.value)
+            feedback(true)
             username.value = ""
             login.value = ""
             password.value = ""
+        }
+
+        const feedback = (status: Boolean) => {
+            if(status) {
+                feebackIsTrue.value = true;
+                setTimeout(() => {
+                    feebackIsTrue.value = false;
+                }, 5000);
+            }
         }
 
         return {
             username,
             login,
             password,
-            registerUser
+            registerUser,
+            feebackIsTrue
         }
     }
 }
@@ -50,11 +71,16 @@ export default {
 </script>
 
 <style scoped>
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .form-box {
-        max-width: 300px;
+        max-width: 370px;
         background: #f1f7fe;
         overflow: hidden;
-        border-radius: 16px;
         color: #010101;
     }
 
@@ -64,6 +90,15 @@ export default {
         flex-direction: column;
         padding: 32px 24px 24px;
         gap: 16px;
+    }
+
+    .form-section {
+        padding: 16px;
+    }
+
+    .titles {
+        display: flex;
+        flex-direction: column;
         text-align: center;
     }
 
@@ -101,5 +136,9 @@ export default {
     .form-section a:hover {
         color: #005ce6;
         text-decoration: underline;
+    }
+
+    .feedback {
+        width: 370px;
     }
 </style>
