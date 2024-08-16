@@ -12,8 +12,8 @@
                     <span class="subtitle">Crie uma conta com seu e-mail.</span>
                 </div>
                 <div class="form-container">
-                    <n-input v-model:value="username" type="text" placeholder="Username" />
-                    <n-input v-model:value="login" type="email" placeholder="Email" />
+                    <n-input v-model:value="username" type="text" placeholder="Usuário" />
+                    <n-input v-model:value="login" type="email" placeholder="Email"  />
                     <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
                 </div>
                 <n-button type="info" @click="registerUser()">
