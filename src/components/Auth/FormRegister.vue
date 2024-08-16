@@ -34,9 +34,9 @@ import { useAuthStore } from '../../stores/auth';
 export default {
     name: "Formulario-Registro-Usuario",
     setup() {
-        const username = ref("")
-        const login = ref("")
-        const password = ref("")
+        const username = ref<string>("")
+        const login = ref<string>("")
+        const password = ref<string>("")
         const feedbackMessage = ref<string | null>(null)
         const feedbackType = ref<string>("")
         const feedbackTitle = ref<string>("")
