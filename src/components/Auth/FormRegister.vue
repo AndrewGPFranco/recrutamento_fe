@@ -1,47 +1,83 @@
 <template>
-    <div class="form-box">
-        <form class="form" @submit.prevent="registerUser">
-            <span class="title">Inscrever-se</span>
-            <span class="subtitle">Crie uma conta com seu e-mail.</span>
-            <div class="form-container">
-                <input type="text" class="input" placeholder="Usuário" v-model="username">
-                <input type="email" class="input" placeholder="Email" v-model="login">
-                <input type="password" class="input" placeholder="Senha" v-model="password">
-            </div>
-            <button>Cadastrar-se</button>
-        </form>
-        <div class="form-section">
-            <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
+    <main>
+        <div class="feedback" v-if="feedbackMessage">
+            <n-alert :title="feedbackTitle" :type="feedbackType" closable>
+                {{ feedbackMessage }}
+            </n-alert>
         </div>
-    </div>
+        <div class="form-box">
+            <form class="form">
+                <div class="titles">
+                    <span class="title">Inscrever-se</span>
+                    <span class="subtitle">Crie uma conta com seu e-mail.</span>
+                </div>
+                <div class="form-container">
+                    <n-input v-model:value="username" type="text" placeholder="Username" />
+                    <n-input v-model:value="login" type="email" placeholder="Email" />
+                    <n-input v-model:value="password" type="password" show-password-on="mousedown" placeholder="Password" :maxlength="30" />
+                </div>
+                <n-button type="info" @click="registerUser()">
+                    Cadastrar-se
+                </n-button>
+            </form>
+            <div class="form-section">
+                <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
+            </div>
+        </div>
+    </main>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 
-
 export default {
     name: "Formulario-Registro-Usuario",
     setup() {
-        const username = ref("")
-        const login = ref("")
-        const password = ref("")
+        const username = ref<string>("")
+        const login = ref<string>("")
+        const password = ref<string>("")
+        const feedbackMessage = ref<string | null>(null)
+        const feedbackType = ref<string>("")
+        const feedbackTitle = ref<string>("")
 
         const authStore = useAuthStore()
 
         const registerUser = async () => {
             await authStore.register(username.value, login.value, password.value)
+            if(authStore.getStatus == 200) {
+                feedback(true)
+            } else {
+                feedback(false)
+            }
             username.value = ""
             login.value = ""
             password.value = ""
+        }
+
+        const feedback = (status: boolean) => {
+            if (status) {
+                feedbackType.value = "success"
+                feedbackTitle.value = "Status"
+                feedbackMessage.value = "Usuário cadastrado com sucesso!"
+            } else {
+                feedbackType.value = "error"
+                feedbackTitle.value = "Status"
+                feedbackMessage.value = "Ocorreu um erro ao cadastrar o usuário!"
+            }
+            setTimeout(() => {
+                feedbackMessage.value = null
+            }, 5000)
         }
 
         return {
             username,
             login,
             password,
-            registerUser
+            registerUser,
+            feedbackMessage,
+            feedbackType,
+            feedbackTitle
         }
     }
 }
@@ -49,11 +85,16 @@ export default {
 </script>
 
 <style scoped>
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .form-box {
-        max-width: 300px;
+        max-width: 370px;
         background: #f1f7fe;
         overflow: hidden;
-        border-radius: 16px;
         color: #010101;
     }
 
@@ -63,6 +104,15 @@ export default {
         flex-direction: column;
         padding: 32px 24px 24px;
         gap: 16px;
+    }
+
+    .form-section {
+        padding: 16px;
+    }
+
+    .titles {
+        display: flex;
+        flex-direction: column;
         text-align: center;
     }
 
@@ -77,22 +127,10 @@ export default {
     }
 
     .form-container {
-        overflow: hidden;
         border-radius: 8px;
         background-color: #fff;
         margin: 1rem 0 .5rem;
         width: 100%;
-    }
-
-    .input {
-        background: none;
-        border: 0;
-        outline: 0;
-        height: 40px;
-        width: 100%;
-        border-bottom: 1px solid #eee;
-        font-size: .9rem;
-        padding: 8px 15px;
     }
 
     .form-section {
@@ -114,19 +152,7 @@ export default {
         text-decoration: underline;
     }
 
-    .form button {
-        background-color: #0066ff;
-        color: #fff;
-        border: 0;
-        border-radius: 24px;
-        padding: 10px 16px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color .3s ease;
-    }
-
-    .form button:hover {
-        background-color: #005ce6;
+    .feedback {
+        width: 370px;
     }
 </style>
