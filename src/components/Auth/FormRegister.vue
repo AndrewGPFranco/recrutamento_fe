@@ -1,13 +1,8 @@
 <template>
     <main>
-        <div class="feedback" v-if="feebackIsTrue">
-            <n-alert title="Status" type="success" closable>
-                Usuário cadastrado com sucesso!
-            </n-alert>
-        </div>
-        <div class="feedback" v-if="feebackIsFalse">
-            <n-alert title="Status" type="error">
-                Ocorreu um erro ao cadastrar o usuário!
+        <div class="feedback" v-if="feedbackMessage">
+            <n-alert :title="feedbackTitle" :type="feedbackType" closable>
+                {{ feedbackMessage }}
             </n-alert>
         </div>
         <div class="form-box">
@@ -42,8 +37,9 @@ export default {
         const username = ref("")
         const login = ref("")
         const password = ref("")
-        const feebackIsTrue = ref()
-        const feebackIsFalse = ref()
+        const feedbackMessage = ref<string | null>(null)
+        const feedbackType = ref<string>("")
+        const feedbackTitle = ref<string>("")
 
         const authStore = useAuthStore()
 
@@ -59,18 +55,19 @@ export default {
             password.value = ""
         }
 
-        const feedback = (status: Boolean) => {
-            if(status) {
-                feebackIsTrue.value = true;
-                setTimeout(() => {
-                    feebackIsTrue.value = false;
-                }, 5000);
+        const feedback = (status: boolean) => {
+            if (status) {
+                feedbackType.value = "success"
+                feedbackTitle.value = "Status"
+                feedbackMessage.value = "Usuário cadastrado com sucesso!"
             } else {
-                feebackIsFalse.value = true;
-                setTimeout(() => {
-                    feebackIsFalse.value = false;
-                }, 5000);
+                feedbackType.value = "error"
+                feedbackTitle.value = "Status"
+                feedbackMessage.value = "Ocorreu um erro ao cadastrar o usuário!"
             }
+            setTimeout(() => {
+                feedbackMessage.value = null
+            }, 5000)
         }
 
         return {
@@ -78,8 +75,9 @@ export default {
             login,
             password,
             registerUser,
-            feebackIsTrue,
-            feebackIsFalse
+            feedbackMessage,
+            feedbackType,
+            feedbackTitle
         }
     }
 }
