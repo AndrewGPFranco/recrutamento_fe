@@ -20,8 +20,6 @@ describe('Formulario-Registro-Usuario', () => {
         }
       }
     })
-    
-    await wrapper.vm.$nextTick() 
 
     const usernameInput = wrapper.find('#inputUsername input')
     const emailInput = wrapper.find('#inputEmail input')
