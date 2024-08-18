@@ -35,6 +35,22 @@ export const useAuthStore = defineStore("auth", {
                 .catch((error) => {
                     console.log(error)
                 })
+        },
+        async login(login: string, password: string) {
+            const data = {
+                login,
+                password
+            }
+
+            await api.post("/auth/login", data)
+                .then((response) => {
+                    this.setToken(response.data.token)
+                    this.setStatus(response.status)
+                    localStorage.setItem("token", response.data.token)
+                })
+                .catch((error)=>{
+                    console.log(error)
+                })
         }
     },
     getters: {
