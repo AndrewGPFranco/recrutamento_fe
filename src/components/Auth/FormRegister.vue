@@ -21,7 +21,7 @@
                 </n-button>
             </form>
             <div class="form-section">
-                <p>Já tem uma conta? <router-link to="/">Login</router-link></p>
+                <p>Já tem uma conta? <router-link :to="{ name: 'login'}">Login</router-link></p>
             </div>
         </div>
     </main>
