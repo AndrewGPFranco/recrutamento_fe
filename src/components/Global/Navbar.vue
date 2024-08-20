@@ -2,10 +2,10 @@
     <nav>
         <router-link :to="{name: 'home'}">RECRUT</router-link>
         <ul>
-            <li v-if="!logado">
+            <li v-if="!logado && route !== 'register-user'">
                 <router-link :to="{name: 'register-user'}">Registrar-se</router-link>
             </li>
-            <li v-if="!logado">
+            <li v-if="!logado && route !== 'login'">
                 <router-link :to="{name: 'login'}">Login</router-link>
             </li>
             <button @click="logout()" v-if="logado">
