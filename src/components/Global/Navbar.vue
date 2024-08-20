@@ -2,13 +2,13 @@
     <nav>
         <router-link :to="{name: 'home'}">RECRUT</router-link>
         <ul>
-            <li>
+            <li v-if="!logado">
                 <router-link :to="{name: 'register-user'}">Registrar-se</router-link>
             </li>
-            <li>
+            <li v-if="!logado">
                 <router-link :to="{name: 'login'}">Login</router-link>
             </li>
-            <button @click="logout()">
+            <button @click="logout()" v-if="logado">
                 Sair
             </button>
         </ul>
@@ -20,6 +20,7 @@ import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+let logado = authStore.getToken?.length === 0 ? false : true
 
 const logout = () => {
     authStore.logout();
