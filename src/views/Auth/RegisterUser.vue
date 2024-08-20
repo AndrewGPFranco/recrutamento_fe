@@ -1,10 +1,14 @@
 <template>
+    <nav>
+        <Navbar />
+    </nav>
     <main>
         <FormRegister />
     </main>
 </template>
 
 <script setup lang="ts">
+import Navbar from "@/components/Global/Navbar.vue";
 import FormRegister from "../../components/Auth/FormRegister.vue"
 </script>
 
