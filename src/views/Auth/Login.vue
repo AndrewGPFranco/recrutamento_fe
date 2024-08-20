@@ -1,4 +1,7 @@
 <template>
+    <nav>
+        <Navbar />
+    </nav>
     <main>
         <FormLogin />
     </main>
@@ -6,6 +9,7 @@
 
 <script setup lang="ts">
 import FormLogin from '@/components/Auth/FormLogin.vue';
+import Navbar from '@/components/Global/Navbar.vue';
 </script>
 
 <style scoped>
