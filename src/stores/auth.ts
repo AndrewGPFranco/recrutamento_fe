@@ -1,5 +1,6 @@
 import type { User } from "@/interfaces/User";
 import { api } from "@/network/axiosInstance";
+import router from "@/router";
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
@@ -51,6 +52,7 @@ export const useAuthStore = defineStore("auth", {
             localStorage.removeItem('token')
             this.token = ""
             this.status = 0
+            router.push({name: 'login'})
         }
     },
     getters: {

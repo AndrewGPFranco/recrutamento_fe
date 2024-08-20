@@ -19,12 +19,13 @@
 import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
+let route = router.currentRoute.value.name
+
 const authStore = useAuthStore();
 let logado = authStore.getToken?.length === 0 ? false : true
 
 const logout = () => {
     authStore.logout();
-    router.push({name: 'home'})
 }
 </script>
 
