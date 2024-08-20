@@ -8,15 +8,23 @@
             <li>
                 <router-link :to="{name: 'login'}">Login</router-link>
             </li>
-            <li>
+            <button @click="logout()">
                 Sair
-            </li>
+            </button>
         </ul>
     </nav>
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
+import { useAuthStore } from '@/stores/auth';
 
+const authStore = useAuthStore();
+
+const logout = () => {
+    authStore.logout();
+    router.push({name: 'home'})
+}
 </script>
 
 <style scoped>
@@ -31,6 +39,7 @@
         display: flex;
         gap: 40px;
         list-style: none;
+        align-items: center;
     }
 
     a {
@@ -39,5 +48,9 @@
 
     a:hover {
         text-decoration: underline;
+    }
+
+    button {
+        padding: 10px;
     }
 </style>

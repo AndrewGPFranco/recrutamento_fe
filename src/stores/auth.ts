@@ -4,11 +4,7 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
-        token: "",
-        user: {
-            username: "",
-            login: ""
-        },
+        token: localStorage.getItem('token') != null ? localStorage.getItem('token') : "",
         status: 0
     }),
     actions: {
@@ -27,8 +23,6 @@ export const useAuthStore = defineStore("auth", {
             }
             await api.post("/auth/register", data)
                 .then((response) => {
-                    this.user.username = response.data.username
-                    this.user.login = response.data.login
                     this.setStatus(response.status)
                     return response
                 })
@@ -47,18 +41,21 @@ export const useAuthStore = defineStore("auth", {
                     this.setToken(response.data.token)
                     this.setStatus(response.status)
                     localStorage.setItem("token", response.data.token)
+                    console.log(response.data)
                 })
                 .catch((error)=>{
                     console.log(error)
                 })
+        },
+        logout() {
+            localStorage.removeItem('token')
+            this.token = ""
+            this.status = 0
         }
     },
     getters: {
         getToken: (state) => {
             return state.token
-        },
-        getUser: (state) => {
-            return state.user
         },
         getStatus: (state) => {
             return state.status
