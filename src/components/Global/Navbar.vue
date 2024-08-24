@@ -8,6 +8,7 @@
             <li v-if="!logado && route !== 'login'">
                 <router-link :to="{name: 'login'}">Login</router-link>
             </li>
+            <p v-if="user">{{ user.username }}</p>
             <button @click="logout()" v-if="logado">
                 Sair
             </button>
@@ -26,6 +27,15 @@ let logado = authStore.getToken?.length === 0 ? false : true
 
 const logout = () => {
     authStore.logout();
+}
+
+const token = localStorage.getItem('token')
+
+const user = authStore.getUser == undefined ? "" : authStore.getUser
+
+if(token != undefined) {
+    authStore.getUserData(token)
+    authStore.getUser
 }
 </script>
 

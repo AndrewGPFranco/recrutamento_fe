@@ -63,7 +63,8 @@ export const useAuthStore = defineStore("auth", {
         logout() {
             localStorage.removeItem('token')
             this.token = ""
-            this.status = 0
+            this.status = 0,
+            this.user = { username: "", login: ""}
             router.push({name: 'login'})
         },
         async getUserData(token: string) {
@@ -75,7 +76,6 @@ export const useAuthStore = defineStore("auth", {
                 login
             }
             this.setUser(user)
-            console.log(tokenDecode)
         }
     },
     getters: {
